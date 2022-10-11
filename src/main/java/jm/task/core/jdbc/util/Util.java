@@ -2,34 +2,21 @@ package jm.task.core.jdbc.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Util {
 
-    private final Connection connection;
-    private static volatile Util instance;
-    final String connectionUrl = "jdbc:mysql://localhost:3306/mydbtest";
-    final String userName = "my_comp1";
-    final String passWord = "getUser2517!";
-    private Util() {
+    private static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
+    private static final String USER = "my_comp1";
+    private static final String PASSWORD = "getUser2517!";
+
+    public static Connection getConnection() {
         try {
-            connection = DriverManager.getConnection(connectionUrl, userName, passWord);
-            connection.setAutoCommit(false);
-            connection.commit();
+            return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
+            System.err.println("Не удалось загрузить");
             throw new RuntimeException(e);
         }
     }
-    public Connection getConnection() {
-        return connection;
-    }
-    public static Util getInstance() {
-        if (instance == null) {
-            synchronized (Util.class) {
-                if (instance == null) {
-                    instance = new Util();
-                }
-            }
-        }
-        return instance;
-    }
+
 }
